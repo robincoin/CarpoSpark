@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_sparkdemo" default="compile.module.sparkdemo">
+  <dirname property="module.sparkdemo.basedir" file="${ant.file.module_sparkdemo}"/>
+  
+  <property name="module.jdk.home.sparkdemo" value="${jdk.home.1.8}"/>
+  <property name="module.jdk.bin.sparkdemo" value="${jdk.bin.1.8}"/>
+  <property name="module.jdk.classpath.sparkdemo" value="jdk.classpath.1.8"/>
+  
+  <property name="compiler.args.sparkdemo" value="-encoding UTF-8 -source 1.5 -target 1.5 ${compiler.args}"/>
+  
+  <property name="sparkdemo.output.dir" value="${module.sparkdemo.basedir}/target/classes"/>
+  <property name="sparkdemo.testoutput.dir" value="${module.sparkdemo.basedir}/target/test-classes"/>
+  
+  <path id="sparkdemo.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="sparkdemo.module.production.classpath">
+    <path refid="${module.jdk.classpath.sparkdemo}"/>
+    <path refid="library.scala-sdk-2.12.4.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.0.b2.classpath"/>
+    <path refid="library.maven:_org.jsoup:jsoup:1.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.spark:spark-core_2.11:2.0.2.classpath"/>
+  </path>
+  
+  <path id="sparkdemo.runtime.production.module.classpath">
+    <pathelement location="${sparkdemo.output.dir}"/>
+    <path refid="library.scala-sdk-2.12.4.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.0.b2.classpath"/>
+    <path refid="library.maven:_org.jsoup:jsoup:1.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.spark:spark-core_2.11:2.0.2.classpath"/>
+  </path>
+  
+  <path id="sparkdemo.module.classpath">
+    <path refid="${module.jdk.classpath.sparkdemo}"/>
+    <pathelement location="${sparkdemo.output.dir}"/>
+    <path refid="library.scala-sdk-2.12.4.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.0.b2.classpath"/>
+    <path refid="library.maven:_org.jsoup:jsoup:1.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.spark:spark-core_2.11:2.0.2.classpath"/>
+  </path>
+  
+  <path id="sparkdemo.runtime.module.classpath">
+    <pathelement location="${sparkdemo.testoutput.dir}"/>
+    <pathelement location="${sparkdemo.output.dir}"/>
+    <path refid="library.scala-sdk-2.12.4.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.0.b2.classpath"/>
+    <path refid="library.maven:_org.jsoup:jsoup:1.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.spark:spark-core_2.11:2.0.2.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.sparkdemo">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.sparkdemo">
+    <patternset refid="excluded.from.module.sparkdemo"/>
+  </patternset>
+  
+  <path id="sparkdemo.module.sourcepath">
+    <dirset dir="${module.sparkdemo.basedir}">
+      <include name="src/main/java"/>
+      <include name="src/main/resources"/>
+    </dirset>
+  </path>
+  
+  <path id="sparkdemo.module.test.sourcepath">
+    <dirset dir="${module.sparkdemo.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.sparkdemo" depends="compile.module.sparkdemo.production,compile.module.sparkdemo.tests" description="Compile module sparkdemo"/>
+  
+  <target name="compile.module.sparkdemo.production" depends="register.custom.compilers" description="Compile module sparkdemo; production classes">
+    <mkdir dir="${sparkdemo.output.dir}"/>
+    <javac2 destdir="${sparkdemo.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.sparkdemo}/javac">
+      <compilerarg line="${compiler.args.sparkdemo}"/>
+      <bootclasspath refid="sparkdemo.module.bootclasspath"/>
+      <classpath refid="sparkdemo.module.production.classpath"/>
+      <src refid="sparkdemo.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.sparkdemo"/>
+    </javac2>
+    
+    <copy todir="${sparkdemo.output.dir}">
+      <fileset dir="${module.sparkdemo.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.sparkdemo.basedir}/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.sparkdemo.tests" depends="register.custom.compilers,compile.module.sparkdemo.production" description="compile module sparkdemo; test classes" unless="skip.tests">
+    <mkdir dir="${sparkdemo.testoutput.dir}"/>
+    <javac2 destdir="${sparkdemo.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.sparkdemo}/javac">
+      <compilerarg line="${compiler.args.sparkdemo}"/>
+      <bootclasspath refid="sparkdemo.module.bootclasspath"/>
+      <classpath refid="sparkdemo.module.classpath"/>
+      <src refid="sparkdemo.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.sparkdemo"/>
+    </javac2>
+    
+    <copy todir="${sparkdemo.testoutput.dir}">
+      <fileset dir="${module.sparkdemo.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.sparkdemo" description="cleanup module">
+    <delete dir="${sparkdemo.output.dir}"/>
+    <delete dir="${sparkdemo.testoutput.dir}"/>
+  </target>
+</project>

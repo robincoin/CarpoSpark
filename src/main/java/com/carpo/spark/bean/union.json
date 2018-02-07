@@ -1,0 +1,123 @@
+{
+  "id": "spark_00002",
+  "name": "Job_0002",
+  "size": 10,
+  "postfix": "test",
+  "suffix": "",
+  "extension": "csv",
+  "format": "",
+  "output": "/data/spark/testout",
+  "split": "|",
+  "nodes": {
+    "node_0": {
+      "input": "/data/grid/*.csv",
+      "type": "input",
+      "key_col": "type",
+      "fields": {
+        "time": {
+          "name": "time",
+          "text": "time",
+          "idx": "0"
+        },
+        "type": {
+          "name": "type",
+          "text": "type",
+          "idx": "1"
+        },
+        "rsrp": {
+          "name": "rsrp",
+          "text": "rsrp",
+          "idx": "2"
+        },
+        "rsrq": {
+          "name": "rsrq",
+          "text": "rsrq",
+          "idx": "3"
+        }
+      }
+    },
+    "node_00": {
+      "input": "/data/num/*.csv",
+      "type": "input",
+      "key_col": "type",
+      "fields": {
+        "time": {
+          "name": "time",
+          "text": "time",
+          "idx": "0"
+        },
+        "type": {
+          "name": "type",
+          "text": "type",
+          "idx": "1"
+        },
+        "rsrp": {
+          "name": "rsrp",
+          "text": "rsrp",
+          "idx": "2"
+        },
+        "rsrq": {
+          "name": "rsrq",
+          "text": "rsrq",
+          "idx": "3"
+        }
+      }
+    },
+    "node_1": {
+      "type": "filter_col",
+      "split": ",",
+      "fields": {
+        "time": {
+          "name": "time",
+          "text": "time",
+          "idx": "0"
+        },
+        "type": {
+          "name": "type",
+          "text": "type",
+          "idx": "1"
+        }
+      }
+    },
+    "node_2": {
+      "type": "distinct"
+    },
+    "node_6": {
+      "type": "output",
+      "time_col": "0",
+      "time_format1": "yyyyMMdd",
+      "time_format2": "yyyy"
+    },
+    "node_11": {
+      "type": "union"
+    },
+    "node_10": {
+      "type": "filter_row",
+      "split": ",",
+      "filter_key": 1,
+      "filter_value": "a"
+    }
+  },
+  "lines": {
+    "line_1": {
+      "inputs": "node_0",
+      "outputs": "node_11"
+    },
+    "line_2": {
+      "inputs": "node_00",
+      "outputs": "node_11"
+    },
+    "line_32": {
+      "inputs": "node_11",
+      "outputs": "node_1"
+    },
+    "line_3": {
+      "inputs": "node_1",
+      "outputs": "node_2"
+    },
+    "line_4": {
+      "inputs": "node_2",
+      "outputs": "node_6"
+    }
+  }
+}

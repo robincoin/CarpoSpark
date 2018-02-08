@@ -1,20 +1,15 @@
 package com.carpo.spark;
 
-import com.carpo.spark.bean.CarpoFlowChart;
-import com.carpo.spark.bean.CarpoNodes;
-import com.carpo.spark.bean.CarpoTask;
-import com.carpo.spark.bean.ENodeType;
+import com.carpo.spark.bean.*;
 import com.carpo.spark.conf.SQLConn;
+import com.carpo.spark.function.KpiFunction;
 import com.carpo.spark.function.TextFunction;
-import com.carpo.spark.function.TextPairFunction;
+import com.carpo.spark.function.TextYesKeyPairFunction;
 import com.carpo.spark.output.RDDMultipleTextOutputFormat;
 import com.carpo.spark.utils.LogUtils;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.JobConf;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaRDDLike;
-import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.*;
 import org.apache.spark.sql.SparkSession;
 import scala.Tuple2;
 
@@ -71,7 +66,7 @@ public class CarpoSpark {
                 rddStack.push(rdd);
             } else if (ENodeType.filter_col.name().equals(nodes.getType())) {//过滤列
                 JavaRDD<String> rdd = rddStack.pop().map(new TextFunction(nodes.getCols(), nodes.getSplit()));
-                rddStack.add(rdd);
+                rddStack.push(rdd);
             } else if (ENodeType.filter_row.name().equals(nodes.getType())) {//过滤行
                 JavaRDD<String> rdd = ((JavaRDD<String>) rddStack.pop()).filter(s -> {
                     try {
@@ -82,40 +77,52 @@ public class CarpoSpark {
                     }
                     return true;
                 });
-                rddStack.add(rdd);
+                rddStack.push(rdd);
             } else if (ENodeType.distinct.name().equals(nodes.getType())) {//去重
                 JavaRDDLike tempRdd = rddStack.pop();
                 if (tempRdd instanceof JavaPairRDD) {
-                    JavaPairRDD<String, String> rdd = ((JavaPairRDD<String, String>) tempRdd).distinct();
-                    rddStack.add(rdd);
+                    JavaPairRDD<String, KpiBean> rdd = ((JavaPairRDD<String, KpiBean>) tempRdd).distinct();
+                    rddStack.push(rdd);
                 } else if (tempRdd instanceof JavaRDD) {
                     JavaRDD<String> rdd = ((JavaRDD<String>) tempRdd).distinct();
-                    rddStack.add(rdd);
+                    rddStack.push(rdd);
                 }
+            } else if (ENodeType.map.name().equals(nodes.getType())) {//去重
+                JavaRDD<String> tempRdd = (JavaRDD) rddStack.pop();
+                JavaPairRDD<String, KpiBean> rdd = null;
+                if (nodes.getKey_col() >= 0) {
+                    rdd = tempRdd.mapToPair(new TextYesKeyPairFunction(nodes.getKey_col(), nodes.getValue_cols(), nodes.getSplit()));
+                } else {
+                    rdd = tempRdd.mapToPair(s -> new Tuple2<String, KpiBean>("", new KpiBean(s)));
+                }
+                rddStack.push(rdd);
+            } else if (ENodeType.group.name().equals(nodes.getType())) {//计算
+                JavaPairRDD<String, KpiBean> rdd = (JavaPairRDD) rddStack.pop();
+                JavaPairRDD<String, KpiBean> newRDD = rdd.reduceByKey(new KpiFunction(nodes.getFields(), nodes.getSplit()));
+                rddStack.push(newRDD);
             } else if (ENodeType.join.name().equals(nodes.getType())) {//join，必须有主键
-                JavaPairRDD<String, String> rdd = (JavaPairRDD<String, String>) rddStack.pop();
-                JavaPairRDD<String, Tuple2<String, org.apache.spark.api.java.Optional<String>>> newRdd = rdd.leftOuterJoin((JavaPairRDD<String, String>) rddStack.pop());
+                JavaPairRDD<String, KpiBean> tempRdd1 = (JavaPairRDD) rddStack.pop();
+                JavaPairRDD<String, KpiBean> tempRdd2 = (JavaPairRDD) rddStack.pop();
+                JavaPairRDD<String, Tuple2<KpiBean, Optional<KpiBean>>> newRDD = tempRdd1.leftOuterJoin(tempRdd2);
+                newRDD.foreach(tuple2 -> {
+                    System.out.println("rdd2:" + tuple2._1 + "=" + tuple2._2);
+                });
+                rddStack.push(newRDD);
             } else if (ENodeType.union.name().equals(nodes.getType())) {//union，列必须相同
-                JavaRDDLike tempRdd = (JavaRDD<String>) rddStack.pop();
+                JavaRDDLike tempRdd = rddStack.pop();
                 if (tempRdd instanceof JavaRDD) {
                     JavaRDD<String> newRdd = ((JavaRDD<String>) tempRdd).union((JavaRDD<String>) rddStack.pop());
-                    rddStack.add(newRdd);
+                    rddStack.push(newRdd);
                 } else {
-                    JavaPairRDD<String, String> newRdd = ((JavaPairRDD<String, String>) tempRdd).union((JavaPairRDD<String, String>) rddStack.pop());
-                    rddStack.add(newRdd);
+                    JavaPairRDD<String, KpiBean> newRdd = ((JavaPairRDD<String, KpiBean>) tempRdd).union((JavaPairRDD<String, KpiBean>) rddStack.pop());
+                    rddStack.push(newRdd);
                 }
             } else if (ENodeType.output.name().equals(nodes.getType())) {//数据输出
-                JavaRDDLike tempRdd = rddStack.pop();
-                JavaPairRDD<String, String> rdd = null;
-                if (tempRdd instanceof JavaRDD) {
-                    rdd = ((JavaRDD<String>) tempRdd).mapToPair(new TextPairFunction(nodes.getCols(), nodes.getSplit(), carpoTask.getSplit()));
-                } else {
-                    rdd = (JavaPairRDD<String, String>) tempRdd;
-                }
+                JavaPairRDD<String, KpiBean> rdd = (JavaPairRDD<String, KpiBean>) rddStack.pop();
                 jobConf.setOutputFormat(RDDMultipleTextOutputFormat.class);
                 RDDMultipleTextOutputFormat.setOutputPath(jobConf, new Path(carpoTask.getOutput()));
                 rdd.saveAsHadoopDataset(jobConf);
-                rdd.saveAsHadoopFile("/ABCDEFG", String.class, String.class, RDDMultipleTextOutputFormat.class);
+                rdd.saveAsHadoopFile("/ABCDEFG", String.class, Object.class, RDDMultipleTextOutputFormat.class);
             }
         }
         sc.close();

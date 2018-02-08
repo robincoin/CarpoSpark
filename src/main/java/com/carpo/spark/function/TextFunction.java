@@ -3,6 +3,7 @@ package com.carpo.spark.function;
 import com.carpo.spark.utils.StringsUtils;
 import org.apache.spark.api.java.function.Function;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,10 +25,11 @@ public class TextFunction implements Function<String, String> {
     @Override
     public String call(String s) throws Exception {
         String[] datas = s.split(split_in);
-        String[] newDatas = new String[cols.size()];
+        List<String> newDatas = new ArrayList<>();
         for (int idx : cols) {
-            newDatas[idx] = datas[idx];
+            newDatas.add(datas[idx]);
         }
-        return StringsUtils.joinArray(newDatas, split_in);
+        return StringsUtils.join(newDatas, split_in);
     }
+
 }

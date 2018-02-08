@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * 执行RDD节点，例如读取文件，过滤，去重，Union
- *
+ * <p>
  * Author 李岩飞
  * Email eliyanfei@126.com
  * 2018/2/3
@@ -21,13 +21,22 @@ public class CarpoNodes {
     private String input;//HDFS路径或者其他
     private String type;//ENodeType
     private String split;//分隔符
-    private String key_col;//主键
+    private int key_col;//主键
+    private int[] value_cols;//对应的输出值
     private String time_col;//时间字段
     private String time_format1;//时间格式输入
     private String time_format2;//时间格式输出
     private Map<String, CarpoFields> fields;//字段
     private int filter_key;//行过滤指定字段
     private String filter_value;//行过滤指定字段对应值
+
+    public int[] getValue_cols() {
+        return value_cols;
+    }
+
+    public void setValue_cols(int[] value_cols) {
+        this.value_cols = value_cols;
+    }
 
     public int getFilter_key() {
         return filter_key;
@@ -94,11 +103,11 @@ public class CarpoNodes {
         this.type = type;
     }
 
-    public String getKey_col() {
+    public int getKey_col() {
         return key_col;
     }
 
-    public void setKey_col(String key_col) {
+    public void setKey_col(int key_col) {
         this.key_col = key_col;
     }
 
@@ -135,6 +144,8 @@ public class CarpoNodes {
     }
 
     public void initJobConf(JobConf conf) {
+        if (StringsUtils.isNotEmpty(split))
+            conf.set("oldsplit", split);
         if (StringsUtils.isNotEmpty(time_col)) {
             conf.set("time_col", time_col);
             if (StringsUtils.isNotEmpty(time_format1)) {
@@ -147,4 +158,5 @@ public class CarpoNodes {
     public List<Integer> getCols() {
         return fields.values().stream().map(f -> f.getIdx()).collect(Collectors.toList());
     }
+
 }

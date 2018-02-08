@@ -1,0 +1,99 @@
+{
+  "id": "spark_00004",
+  "name": "group",
+  "size": 10,
+  "postfix": "test",
+  "suffix": "",
+  "extension": "csv",
+  "format": "",
+  "output": "/data/spark/gridout",
+  "split": "|",
+  "nodes": {
+    "node_11": {
+      "input": "/data/grid/*.csv",
+      "type": "input"
+    },
+    "node_12": {
+      "type": "filter_col",
+      "split": ",",
+      "fields": {
+        "type": {
+          "name": "type",
+          "text": "type",
+          "idx": 1
+        },
+        "rsrp": {
+          "name": "rsrp",
+          "text": "rsrp",
+          "idx": 2
+        },
+        "rsrq": {
+          "name": "rsrq",
+          "text": "rsrq",
+          "idx": 3
+        }
+      }
+    },
+    "node_13": {
+      "type": "map",
+      "split": ",",
+      "key_col": 0
+    },
+    "node_14": {
+      "type": "group",
+      "split": ",",
+      "fields": {
+        "rsrp": {
+          "name": "rsrp",
+          "oper": "avg",
+          "idx": 1
+        },
+        "rsrq": {
+          "name": "rsrq",
+          "oper": "sum",
+          "idx": 2
+        },
+        "rsrq1": {
+          "name": "rsrq1",
+          "oper": "max",
+          "idx": 2
+        },
+        "rsrq2": {
+          "name": "rsrq2",
+          "oper": "min",
+          "idx": 2
+        },
+        "rsrq3": {
+          "name": "rsrq3",
+          "oper": "count",
+          "idx": 2
+        }
+      }
+    },
+    "node_6": {
+      "type": "output",
+      "time_col": "0",
+      "time_format1": "yyyyMMdd",
+      "time_format2": "yyyy",
+      "split": ","
+    }
+  },
+  "lines": {
+    "line_1": {
+      "inputs": "node_11",
+      "outputs": "node_12"
+    },
+    "line_52": {
+      "inputs": "node_12",
+      "outputs": "node_13"
+    },
+    "line_2": {
+      "inputs": "node_13",
+      "outputs": "node_14"
+    },
+    "line_7": {
+      "inputs": "node_14",
+      "outputs": "node_6"
+    }
+  }
+}

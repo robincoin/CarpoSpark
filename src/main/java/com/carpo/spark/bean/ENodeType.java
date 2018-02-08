@@ -6,7 +6,7 @@ package com.carpo.spark.bean;
  * 2018/2/5
  */
 public enum ENodeType {
-    input("HDFS"), output("HDFS"), filter_col("过滤列"), filter_row("行"), distinct("去重"), join("合并"), union("联合"), group("分组");
+    input("HDFS"), output("HDFS"), filter_col("过滤列"), filter_row("过滤行"), map("Key Value"), distinct("去重"), join("合并"), union("联合"), group("分组");
     public String name;
 
     private ENodeType(String name) {

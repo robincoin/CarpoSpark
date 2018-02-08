@@ -1,12 +1,14 @@
 package com.carpo.spark.bean;
 
+import java.io.Serializable;
+
 /**
  * 文件字段相应信息
  * Author 李岩飞
  * Email eliyanfei@126.com
  * 2018/2/3
  */
-public class CarpoFields {
+public class CarpoFields implements Serializable{
     private int idx;//下标未知
     private String name;//文件字段,自动生成
     private String text;//中文名称

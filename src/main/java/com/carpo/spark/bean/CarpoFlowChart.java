@@ -2,10 +2,7 @@ package com.carpo.spark.bean;
 
 import com.carpo.spark.utils.StringsUtils;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * 根据Json，获取执行流程图，
@@ -51,7 +48,6 @@ public class CarpoFlowChart {
                 lineMap.remove(l);
             }
         }
-
         //查找终点
         for (final String nodeId : nodeMap.keySet()) {
             CarpoNodes node = nodeMap.get(nodeId);
@@ -70,7 +66,7 @@ public class CarpoFlowChart {
     private void findParentNode(DAGBean pdag) {
         for (String lineId : carpoTask.getLines().keySet()) {
             CarpoLines line = carpoTask.getLines().get(lineId);
-            if (line.getOutputs().contains(pdag.getNodeId())) {
+            if ((line.getOutputs() + ",").contains(pdag.getNodeId() + ",")) {
                 for (final String sId : line.getInputs().split(",")) {
                     CarpoNodes node = carpoTask.getNodes().get(sId);
                     if (node != null) {
@@ -87,6 +83,7 @@ public class CarpoFlowChart {
 
     /**
      * 获取节点的执行顺序
+     *
      * @return
      */
     public Stack<CarpoNodes> getExeOrder() {

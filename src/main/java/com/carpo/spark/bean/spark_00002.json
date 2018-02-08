@@ -1,6 +1,6 @@
 {
   "id": "spark_00002",
-  "name": "Job_0002",
+  "name": "Union过滤",
   "size": 10,
   "postfix": "test",
   "suffix": "",
@@ -9,61 +9,11 @@
   "output": "/data/spark/testout",
   "split": "|",
   "nodes": {
-    "node_0": {
+    "node_11": {
       "input": "/data/grid/*.csv",
-      "type": "input",
-      "key_col": "type",
-      "fields": {
-        "time": {
-          "name": "time",
-          "text": "time",
-          "idx": "0"
-        },
-        "type": {
-          "name": "type",
-          "text": "type",
-          "idx": "1"
-        },
-        "rsrp": {
-          "name": "rsrp",
-          "text": "rsrp",
-          "idx": "2"
-        },
-        "rsrq": {
-          "name": "rsrq",
-          "text": "rsrq",
-          "idx": "3"
-        }
-      }
+      "type": "input"
     },
-    "node_00": {
-      "input": "/data/num/*.csv",
-      "type": "input",
-      "key_col": "type",
-      "fields": {
-        "time": {
-          "name": "time",
-          "text": "time",
-          "idx": "0"
-        },
-        "type": {
-          "name": "type",
-          "text": "type",
-          "idx": "1"
-        },
-        "rsrp": {
-          "name": "rsrp",
-          "text": "rsrp",
-          "idx": "2"
-        },
-        "rsrq": {
-          "name": "rsrq",
-          "text": "rsrq",
-          "idx": "3"
-        }
-      }
-    },
-    "node_1": {
+    "node_12": {
       "type": "filter_col",
       "split": ",",
       "fields": {
@@ -79,44 +29,93 @@
         }
       }
     },
-    "node_2": {
+    "node_13": {
+      "type": "map",
+      "split": ",",
+      "key_col": -1
+    },
+    "node_21": {
+      "input": "/data/num/*.csv",
+      "type": "input"
+    },
+    "node_22": {
+      "type": "filter_col",
+      "split": ",",
+      "fields": {
+        "time": {
+          "name": "time",
+          "text": "time",
+          "idx": "0"
+        },
+        "type": {
+          "name": "type",
+          "text": "type",
+          "idx": "1"
+        }
+      }
+    },
+    "node_23": {
+      "type": "map",
+      "split": ",",
+      "key_col": -1
+    },
+    "node_8": {
       "type": "distinct"
     },
     "node_6": {
       "type": "output",
       "time_col": "0",
       "time_format1": "yyyyMMdd",
-      "time_format2": "yyyy"
-    },
-    "node_11": {
-      "type": "union"
-    },
-    "node_10": {
-      "type": "filter_row",
+      "time_format2": "yyyy",
       "split": ",",
-      "filter_key": 1,
-      "filter_value": "a"
+      "fields": {
+        "time": {
+          "name": "time",
+          "text": "time",
+          "idx": "0"
+        },
+        "type": {
+          "name": "type",
+          "text": "type",
+          "idx": "1"
+        }
+      }
+    },
+    "node_1": {
+      "type": "union"
     }
   },
   "lines": {
-    "line_1": {
-      "inputs": "node_0",
-      "outputs": "node_11"
+    "line_4": {
+      "inputs": "node_21",
+      "outputs": "node_22"
     },
-    "line_2": {
-      "inputs": "node_00",
-      "outputs": "node_11"
+    "line_5": {
+      "inputs": "node_22",
+      "outputs": "node_23"
     },
-    "line_32": {
-      "inputs": "node_11",
+    "line_6": {
+      "inputs": "node_23",
       "outputs": "node_1"
     },
-    "line_3": {
-      "inputs": "node_1",
-      "outputs": "node_2"
+    "line_1": {
+      "inputs": "node_11",
+      "outputs": "node_12"
     },
-    "line_4": {
-      "inputs": "node_2",
+    "line_2": {
+      "inputs": "node_12",
+      "outputs": "node_13"
+    },
+    "line_3": {
+      "inputs": "node_13",
+      "outputs": "node_1"
+    },
+    "line_7": {
+      "inputs": "node_1",
+      "outputs": "node_8"
+    },
+    "line_8": {
+      "inputs": "node_8",
       "outputs": "node_6"
     }
   }

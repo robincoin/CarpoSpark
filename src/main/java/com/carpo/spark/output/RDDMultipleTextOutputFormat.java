@@ -1,5 +1,6 @@
 package com.carpo.spark.output;
 
+import com.carpo.spark.bean.KpiBean;
 import com.carpo.spark.utils.DateUtils;
 import com.carpo.spark.utils.NumberUtils;
 import com.carpo.spark.utils.StringsUtils;
@@ -9,6 +10,8 @@ import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.mapred.lib.MultipleTextOutputFormat;
 import org.apache.hadoop.mapreduce.security.TokenCache;
 import org.apache.hadoop.util.Progressable;
+import org.apache.spark.api.java.Optional;
+import scala.Tuple2;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -21,19 +24,21 @@ import java.util.TreeMap;
  * 2018/2/3
  */
 public class RDDMultipleTextOutputFormat extends
-        MultipleTextOutputFormat<String, String> {
-    private TextOutputFormat<String, String> theTextOutputFormat = null;
+        MultipleTextOutputFormat<String, Object> {
+    private TextOutputFormat<String, Object> theTextOutputFormat = null;
     private int fileIdx = 1;
     private JobConf jobConf;
     private String postfix;//前缀
     private String suffix;//后缀
     private String extension;//扩展名
     private int time_col;//是否有时间字段
+    private String oldsplit;//老的分割符
+    private String newsplit;//新的分割符
     private String time_format1;//输入时间格式
     private String time_format2;//输出时间格式
     private static long defSize = 100 * 1024 * 1024;/*默认100M,文件大小拆分*/
 
-    public RecordWriter<String, String> getRecordWriter(final FileSystem fs, final JobConf job, String name, final Progressable arg3) throws IOException {
+    public RecordWriter<String, Object> getRecordWriter(final FileSystem fs, final JobConf job, String name, final Progressable arg3) throws IOException {
         final String myName = this.generateLeafFileName(name);
         this.jobConf = job;
         this.extension = job.get("extension");
@@ -42,11 +47,13 @@ public class RDDMultipleTextOutputFormat extends
         this.time_col = NumberUtils.toInt(job.get("time_col"), -1);
         this.time_format1 = job.get("time_format1");
         this.time_format2 = job.get("time_format2");
+        this.oldsplit = StringsUtils.trimNull(job.get("split"), ",");
+        this.newsplit = StringsUtils.trimNull(job.get("split"), ",");
         final long fileSize = NumberUtils.toLong(job.get("size"), defSize);
-        return new RecordWriter<String, String>() {
-            TreeMap<String, RecordWriter<String, String>> recordWriters = new TreeMap();
+        return new RecordWriter<String, Object>() {
+            TreeMap<String, RecordWriter<String, Object>> recordWriters = new TreeMap();
 
-            public void write(String key, String value) throws IOException {
+            public void write(String key, Object value) throws IOException {
                 String keyBasedPath = RDDMultipleTextOutputFormat.this.generateFileNameForKeyValue(key, value, myName);
                 String finalPath = RDDMultipleTextOutputFormat.this.getInputFileBasedOutputFileName(job, keyBasedPath);
                 Object actualKey = RDDMultipleTextOutputFormat.this.generateActualKey(key, value);
@@ -73,16 +80,38 @@ public class RDDMultipleTextOutputFormat extends
         };
     }
 
+    protected Object generateActualValue(String key, Object value) {
+        String v = null;
+        if (value instanceof Tuple2) {
+            Tuple2<KpiBean, Optional<KpiBean>> tuple2 = (Tuple2) value;
+            v = tuple2._1 + newsplit + tuple2._2.orNull();
+        } else if (value instanceof KpiBean) {
+            v = ((KpiBean) value).toString(newsplit);
+        } else {
+            v = value.toString();
+        }
+        return v.replaceAll(oldsplit, newsplit);
+    }
+
     @Override
-    protected String generateFileNameForKeyValue(String key, String value, String name) {
+    protected String generateFileNameForKeyValue(String key, Object value, String name) {
         final StringBuilder sb = new StringBuilder();
         if (StringsUtils.isNotEmpty(postfix))
             sb.append(postfix).append("_");
         if (time_col != -1) {
+            String v = null;
+            if (value instanceof String) {
+                v = (String) value;
+            } else if (value instanceof Tuple2) {
+                Tuple2<KpiBean, Optional<KpiBean>> tuple2 = (Tuple2) value;
+                v = tuple2._1 + oldsplit + tuple2._2.orNull();
+            } else if (value instanceof KpiBean) {
+                v = ((KpiBean) value).toString(oldsplit);
+            }
             if (time_format1 == null || time_format1.equals(time_format2)) {
-                sb.append(value.split(",")[time_col]);
+                sb.append(v.split(this.oldsplit)[time_col]);
             } else {
-                sb.append(DateUtils.formatDate(value.split(",")[time_col], time_format1, time_format2));
+                sb.append(DateUtils.formatDate(v.split(this.oldsplit)[time_col], time_format1, time_format2));
             }
             sb.append("_");
         }
@@ -93,7 +122,7 @@ public class RDDMultipleTextOutputFormat extends
         return sb.toString();
     }
 
-    protected RecordWriter<String, String> getBaseRecordWriter(FileSystem fs, JobConf job, String name, Progressable arg3) throws IOException {
+    protected RecordWriter<String, Object> getBaseRecordWriter(FileSystem fs, JobConf job, String name, Progressable arg3) throws IOException {
         if (this.theTextOutputFormat == null) {
             this.theTextOutputFormat = new RDDTextOutputFormat();
         }

@@ -113,6 +113,7 @@ public class CarpoTask {
 
     public JobConf getJobConf() {
         final JobConf jobConf = new JobConf();
+        jobConf.set("newsplit", split);
         jobConf.set("extension", extension);
         jobConf.set("postfix", postfix);
         jobConf.set("suffix", suffix);

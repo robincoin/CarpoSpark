@@ -29,7 +29,7 @@ public class RDDTextOutputFormat<K, V> extends org.apache.hadoop.mapred.TextOutp
 
     public RecordWriter<K, V> getRecordWriter(FileSystem ignored, JobConf job, String name, Progressable progress) throws IOException {
         boolean isCompressed = getCompressOutput(job);
-        String keyValueSeparator = job.get("mapreduce.output.textoutputformat.separator", "");
+        String keyValueSeparator = job.get("split", ",");
 //        String keyValueSeparator = job.get("mapreduce.output.textoutputformat.separator", "\t");
         if (!isCompressed) {
             Path codecClass1 = FileOutputFormat.getTaskOutputPath(job, name);

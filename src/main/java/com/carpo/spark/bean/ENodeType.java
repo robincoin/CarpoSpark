@@ -6,19 +6,19 @@ package com.carpo.spark.bean;
  * 2018/2/5
  */
 public enum ENodeType {
-    input("HDFS", ENodeType.filter_col, ENodeType.filter_row, ENodeType.distinct, ENodeType.map, ENodeType.union),
-    filter_col("过滤列", ENodeType.distinct, ENodeType.union, ENodeType.map, ENodeType.filter_row),
-    filter_row("过滤行", ENodeType.distinct, ENodeType.union, ENodeType.map, ENodeType.filter_col),
-    distinct("去重", ENodeType.group, ENodeType.join, ENodeType.union, ENodeType.map, ENodeType.output),
-    map("Key Value", ENodeType.group, ENodeType.join, ENodeType.distinct, ENodeType.output),
-    join("合并", ENodeType.distinct, ENodeType.group, ENodeType.output),
-    union("联合", ENodeType.distinct, ENodeType.group, ENodeType.output),
-    group("分组", ENodeType.output),
+    input("HDFS", "filter_col", "filter_row", "distinct", "map", "union"),
+    filter_col("过滤列", "distinct", "union", "map", "filter_row"),
+    filter_row("过滤行", "distinct", "union", "map", "filter_col"),
+    distinct("去重", "group", "join", "union", "map", "output"),
+    map("Key Value", "group", "join", "distinct", "output"),
+    join("合并", "distinct", "group", "output"),
+    union("联合", "distinct", "group", "output"),
+    group("分组", "output"),
     output("HDFS");
     public String name;
-    public ENodeType[] nexts;
+    public String[] nexts;
 
-    private ENodeType(String name, ENodeType... nexts) {
+    private ENodeType(String name, String... nexts) {
         this.name = name;
         this.nexts = nexts;
     }

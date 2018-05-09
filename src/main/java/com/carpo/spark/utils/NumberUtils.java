@@ -1,6 +1,5 @@
 package com.carpo.spark.utils;
 
-import org.apache.commons.lang.StringUtils;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -31,7 +30,7 @@ public class NumberUtils {
     public static String formatNumber(final String format, final Object value, final Locale locale) {
         if (value == null)
             return null;
-        if (StringUtils.isBlank(format))
+        if (StringsUtils.isEmpty(format))
             return value.toString();
 
         final NumberFormat nf = NumberFormat.getNumberInstance(locale);

@@ -11,6 +11,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="scala-sdk-2.12.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.spark:spark-core_2.11:2.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.spark:spark-streaming_2.11:2.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.spark:spark-hive_2.11:2.2.0" level="project" />
@@ -22,7 +23,7 @@
     <orderEntry type="module-library">
       <library name="Maven: jdk.tools:jdk.tools:1.8">
         <CLASSES>
-          <root url="jar://D:/Java8/jdk1.8.0_92/jre/../lib/tools.jar!/" />
+          <root url="jar://E:/Java8/jdk1.8.0_92/jre/../lib/tools.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -101,6 +102,303 @@
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-guice:1.9" level="project" />
     <orderEntry type="library" name="Maven: com.google.inject.extensions:guice-servlet:3.0" level="project" />
-    <orderEntry type="library" name="scala-sdk-2.12.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.5" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: org.spark_project.guava:spark-network-common_2.11-2.2.0:2.11-2.2.0">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/spark-network-common_2.11-2.2.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: org.spark_project.shuffle:spark-shuffle-common_2.11-2.2.0:2.11-2.2.0">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/spark-network-shuffle_2.11-2.2.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: scala:scala-library-2.11.8:2.11.8">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/scala-library-2.11.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: scala.reflect:scala-reflect-2.11.8:2.11.8">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/scala-reflect-2.11.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: scala.xml:scala-xml-2.11.8:2.11.8">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/scala-xml_2.11-1.0.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.kryo-shaded:kryo-shaded:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/kryo-shaded-3.0.3.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.chill:chill:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/chill_2.11-0.8.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.unsafe:unsafe:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/spark-unsafe_2.11-2.2.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.metrics-core:metrics-core:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/metrics-core-3.1.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.metrics-graphite:metrics-graphite:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/metrics-graphite-3.1.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.metrics-json:metrics-json:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/metrics-json-3.1.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.metrics-jvm:metrics-jvm:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/metrics-jvm-3.1.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.ast_2:ast_2:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/json4s-ast_2.11-3.2.11.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.json4s-core:json4s-core:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/json4s-core_2.11-3.2.11.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.json4s-jackson:json4s-jackson:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/json4s-jackson_2.11-3.2.11.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.javax-servlet:javax-servlet:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/javax.servlet-api-3.1.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.jersey-servlet:jersey-servlet:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jersey-container-servlet-2.22.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.jersey-core:jersey-core:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jersey-container-servlet-core-2.22.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.jersey-server:jersey-server:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jersey-server-2.22.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.jspark-launcher:spark-launcher:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/spark-launcher_2.11-2.2.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.jackson:jackson:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jackson-core-2.6.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.jackson-da:jackson-da:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jackson-databind-2.6.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.jackson-a:jackson-a:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jackson-annotations-2.6.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.jackson-paranamer:jackson-paranamer:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jackson-module-paranamer-2.6.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.jackson-sc:jackson-sc:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/jackson-module-scala_2.11-2.6.5.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.xbean:xbean:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/xbean-asm5-shaded-4.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.lz:lz:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/lz4-1.3.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.py:py:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/py4j-0.10.4.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.kafka_2:kafka_2:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/kafka_2.11-0.8.2-beta.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.sparkkafka_2:spark.kafka_2:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/spark-streaming-kafka-0-8_2.11-2.2.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.clients:spark.clients:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/kafka-clients-1.0.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.guava:spark.guava:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/guava-20.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.zkclient:spark.zkclient:3.0.3">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/zkclient-0.10.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

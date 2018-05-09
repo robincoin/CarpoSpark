@@ -1,7 +1,7 @@
 package com.carpo.spark.bean;
 
-import org.apache.commons.collections.map.HashedMap;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -31,7 +31,7 @@ public class DAGBean {
     }
 
     public Map<String, DAGBean> getDagMap() {
-        if (this.dagMap == null) this.dagMap = new HashedMap();
+        if (this.dagMap == null) this.dagMap = new HashMap<>();
         return dagMap;
     }
 

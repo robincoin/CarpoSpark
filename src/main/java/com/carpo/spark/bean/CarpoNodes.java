@@ -21,6 +21,7 @@ public class CarpoNodes {
     private String input;//HDFS路径或者其他
     private String type;//ENodeType
     private String split;//分隔符
+    private boolean cache;//是否缓存
     private int key_col;//主键
     private int[] value_cols;//对应的输出值
     private String time_col;//时间字段
@@ -29,6 +30,14 @@ public class CarpoNodes {
     private Map<String, CarpoFields> fields;//字段
     private int filter_key;//行过滤指定字段
     private String filter_value;//行过滤指定字段对应值
+
+    public void setCache(boolean cache) {
+        this.cache = cache;
+    }
+
+    public boolean isCache() {
+        return cache;
+    }
 
     public int[] getValue_cols() {
         return value_cols;

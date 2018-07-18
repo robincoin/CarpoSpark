@@ -14,7 +14,7 @@ import java.util.Stack;
 public class Main {
     public static void main(String[] args) {
         Gson gson = new Gson();
-        String json = IOUtils.readFromFileAsString(new File("E:\\train\\spark_00004.json"));
+        String json = IOUtils.readFromFileAsString(new File("E:\\train\\指标计算.json"));
         CarpoTask task = gson.fromJson(json, CarpoTask.class);
         CarpoFlowChart chart = task.getFlowChart();
         Stack<CarpoNodes> stack = chart.getExeOrder();

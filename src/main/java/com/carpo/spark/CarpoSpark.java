@@ -63,6 +63,9 @@ public class CarpoSpark {
             LogUtils.info("node split :" + nodes.getSplit());
             if (ENodeType.input.name().equals(nodes.getType())) {//数据源RDD
                 JavaRDD<String> rdd = sc.textFile(nodes.getInput());
+                if(nodes.isCache()){
+                    rdd.cache();
+                }
                 rddStack.push(rdd);
             } else if (ENodeType.filter_col.name().equals(nodes.getType())) {//过滤列
                 JavaRDD<String> rdd = rddStack.pop().map(new TextFunction(nodes.getCols(), nodes.getSplit()));

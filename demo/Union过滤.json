@@ -41,6 +41,7 @@
     "node_22": {
       "type": "filter_col",
       "split": ",",
+      "cache":true,
       "fields": {
         "time": {
           "name": "time",
